@@ -11,6 +11,8 @@ const app = express();
 const { verifyToken } = require('./middleware/authMiddleware');
 
 // Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
@@ -28,8 +30,8 @@ const users = require('./routes/api/users')
 const create = require('./routes/api/users/create')
 const update = require('./routes/api/users/update')
 app.use('/api/users', verifyToken, users)
-app.use('/api/users/create', verifyToken, create)
-app.use('/api/users/update', verifyToken, update)
+app.use('/api/users', verifyToken, create)
+app.use('/api/users', verifyToken, update)
 
 const port = process.env.PORT || 5000;
 

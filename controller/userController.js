@@ -3,23 +3,23 @@ const { loadUserCollection } = require('../config/db');
 
 // Get user list
 const getUsers = async (req, res) => {
-  const usersCollection = await loadUserCollection();
-  const users = await usersCollection
-    .find({}, { projection: { password: 0 } })
-    .toArray();
-  res.status(200).json(users);
-};
-
-
-// Create user
-const userController = async (req, res) => {
   try {
     const usersCollection = await loadUserCollection();
-    const firstName = req.query.firstName || req.body.firstName;
-    const lastName = req.query.lastName || req.body.lastName;
-    const type = req.query.type || req.body.type;
-    const status = req.query.status || req.body.status;
-    const password = req.query.password || req.body.password
+    const users = await usersCollection
+      .find({}, { projection: { password: 0 } }) // Exclude passwords
+      .toArray();
+    res.status(200).json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to retrieve users.' });
+  }
+};
+
+// Create user
+const createUser = async (req, res) => {
+  try {
+    const usersCollection = await loadUserCollection();
+    const { firstName, lastName, type, status } = req.query;
 
     // Validate input
     if (!firstName || !lastName || !type || !status) {
@@ -27,13 +27,12 @@ const userController = async (req, res) => {
     }
 
     const userExist = await usersCollection.findOne({
-      $or: [{ firstName }, { lastName }],
+      $or: [{ lastName }],
     });
     if (userExist) {
-      return res.status(409).json({ message: 'User details already exist.' });
+      return res.status(409).json({ message: 'User lastname already exist.' });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
     const counter = await usersCollection.countDocuments();
     const newUser = {
       id: counter + 1,
@@ -42,7 +41,6 @@ const userController = async (req, res) => {
       userName: `${firstName}${lastName}`.toLowerCase(),
       type,
       status,
-      password: hashedPassword,
     };
 
     await usersCollection.insertOne(newUser);
@@ -55,4 +53,45 @@ const userController = async (req, res) => {
   }
 };
 
-module.exports = { getUsers, userController };
+// Update user
+const updateUser = async (req, res) => {
+  try {
+    const usersCollection = await loadUserCollection();
+    const { _id } = req.params;
+    const { firstName, lastName, type, status } = req.query || req.body;
+
+    // Validate input
+    if (!firstName || !lastName || !type || !status) {
+      return res.status(400).json({ message: 'Please enter all fields.' });
+    }
+
+    // Find the user to update
+    const user = await usersCollection.findOne({ _id });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    // Update user fields
+    const updatedUser = {
+      firstName,
+      lastName,
+      type,
+      status,
+    };
+
+    await usersCollection.updateOne(
+      { id: parseInt(_id, 10) },
+      { $set: updatedUser }
+    );
+
+    res.status(200).json({
+      data: { ...updatedUser, password: undefined }, // Exclude password from response
+      metadata: { message: 'User updated successfully.' },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error while updating user.' });
+  }
+};
+
+module.exports = { getUsers, createUser, updateUser };

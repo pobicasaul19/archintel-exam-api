@@ -4,15 +4,14 @@ const { loadUserCollection } = require('../config/db');
 
 // Generate access token
 const generateAccessToken = (userId) => {
-  return jwt.sign({ id: userId }, 'archTestKey', { expiresIn: '30m' });
+  return jwt.sign({ id: userId }, 'archTestKey');
 };
 
 // Login user
 const login = async (req, res) => {
   try {
     const usersCollection = await loadUserCollection();
-    const userName = req.query.userName || req.body.userName;
-    const password = req.query.password || req.body.password;
+    const { userName, password } = req.query;
 
     // Validate input
     if (!userName || !password) {

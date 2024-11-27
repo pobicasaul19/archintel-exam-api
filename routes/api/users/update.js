@@ -1,5 +1,5 @@
 const express = require('express');
-const { userController } = require('../../../controller/userController');
+const { updateUser } = require('../../../controller/userController');
 
 /**
  * @swagger
@@ -10,6 +10,12 @@ const { userController } = require('../../../controller/userController');
  *     tags:
  *       - User
  *     parameters:
+ *       - in: path
+ *         name: _id
+ *         description: User ID
+ *         required: true
+ *         schema:
+ *           type: string
  *       - in: query
  *         name: firstName
  *         description: User Firstname
@@ -36,11 +42,11 @@ const { userController } = require('../../../controller/userController');
  *           type: string
  *     responses:
  *       201:
- *         description: Successfully registered
+ *         description: Successfully updated
  *       400:
  *         description: Bad request
  */
 
 const router = express.Router();
-router.put('/', userController);
+router.put('/:_id', updateUser);
 module.exports = router;
