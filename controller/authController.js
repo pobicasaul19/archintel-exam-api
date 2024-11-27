@@ -11,7 +11,7 @@ const generateAccessToken = (userId) => {
 const login = async (req, res) => {
   try {
     const usersCollection = await loadUserCollection();
-    const { userName, password } = req.query;
+    const { userName, password } = req.body;
 
     // Validate input
     if (!userName || !password) {

@@ -3,12 +3,12 @@ const { updateUser } = require('../../../controller/userController');
 
 /**
  * @swagger
- * /api/users/update/{_id}:
+ * /api/users/{_id}:
  *   put:
  *     summary: Update User
  *     description: Update user info with the provided details.
  *     tags:
- *       - User
+ *       - Users
  *     parameters:
  *       - in: path
  *         name: _id

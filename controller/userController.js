@@ -1,5 +1,6 @@
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs')
 const { loadUserCollection } = require('../config/db');
+const { ObjectId } = require('mongodb')
 
 // Get user list
 const getUsers = async (req, res) => {
@@ -19,20 +20,20 @@ const getUsers = async (req, res) => {
 const createUser = async (req, res) => {
   try {
     const usersCollection = await loadUserCollection();
-    const { firstName, lastName, type, status } = req.query;
+    const { firstName, lastName, type, status, password } = req.body;
 
-    // Validate input
+    // Validate required fields
     if (!firstName || !lastName || !type || !status) {
-      return res.status(400).json({ message: 'Please enter all fields.' });
+      return res.status(400).json({ message: 'Please enter all required fields.' });
     }
 
-    const userExist = await usersCollection.findOne({
-      $or: [{ lastName }],
-    });
+    // Check if the user already exists
+    const userExist = await usersCollection.findOne({ firstName });
     if (userExist) {
-      return res.status(409).json({ message: 'User lastname already exist.' });
+      return res.status(409).json({ message: 'User lastname already exists.' });
     }
 
+    // Count existing documents to generate a unique ID
     const counter = await usersCollection.countDocuments();
     const newUser = {
       id: counter + 1,
@@ -41,15 +42,23 @@ const createUser = async (req, res) => {
       userName: `${firstName}${lastName}`.toLowerCase(),
       type,
       status,
+      ...(password ? { password: await bcrypt.hash(password, 10) } : {}),
     };
 
+    // Insert the new user into the database
     await usersCollection.insertOne(newUser);
     res.status(201).json({
-      data: { user: { ...newUser } },
+      data: { user: newUser },
       metadata: { message: 'User created successfully.' },
     });
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    console.error('Error creating user:', error);
+    if (error instanceof SomeCustomError) {
+      return res.status(400).json({ message: error.message });
+    }
+    return res.status(500).json({
+      message: error.message || 'An error occurred while processing your request.'
+    });
   }
 };
 
@@ -58,15 +67,15 @@ const updateUser = async (req, res) => {
   try {
     const usersCollection = await loadUserCollection();
     const { _id } = req.params;
-    const { firstName, lastName, type, status } = req.query || req.body;
+    const { firstName, lastName, type, status } = req.body;
 
     // Validate input
     if (!firstName || !lastName || !type || !status) {
       return res.status(400).json({ message: 'Please enter all fields.' });
     }
-
     // Find the user to update
-    const user = await usersCollection.findOne({ _id });
+    const newId = new ObjectId(_id);
+    const user = await usersCollection.findOne({ _id: newId });
     if (!user) {
       return res.status(404).json({ message: 'User not found.' });
     }
@@ -80,7 +89,7 @@ const updateUser = async (req, res) => {
     };
 
     await usersCollection.updateOne(
-      { id: parseInt(_id, 10) },
+      { _id: newId },
       { $set: updatedUser }
     );
 

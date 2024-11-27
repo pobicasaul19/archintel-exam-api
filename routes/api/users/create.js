@@ -8,7 +8,7 @@ const { createUser } = require('../../../controller/userController');
  *     summary: Create User
  *     description: Create a new user with the provided details.
  *     tags:
- *       - User
+ *       - Users
  *     parameters:
  *       - in: query
  *         name: firstName

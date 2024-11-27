@@ -7,7 +7,7 @@ const { getUsers } = require('../../../controller/userController');
  *   get:
  *     summary: Get user list
  *     tags:
- *       - User
+ *       - Users
  *     responses:
  *       201:
  *         description: Successfully registered
