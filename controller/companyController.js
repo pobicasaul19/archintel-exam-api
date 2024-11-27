@@ -1,50 +1,74 @@
-const { loadUserCollection } = require('../config/db');
+const { loadCompanyCollection } = require('../config/db');
+const { ObjectId } = require('mongodb')
 
+// Get company list
+const getCompany = async (req, res) => {
+  try {
+    const companyCollection = await loadCompanyCollection();
+    const companies = await companyCollection.find({}).toArray();
+    res.status(200).json(companies);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+}
 
 // Create Company
 const createCompany = async (req, res) => {
   try {
-    const usersCollection = await loadUserCollection();
-    const firstName = req.query.firstName || req.body.firstName;
-    const lastName = req.query.lastName || req.body.lastName;
-    const type = req.query.type || req.body.type;
-    const status = req.query.status || req.body.status;
-    const password = req.query.password || req.body.password
+    const companyCollection = await loadCompanyCollection();
+    const { logo, name, status } = req.body;
+    const counter = await companyCollection.countDocuments();
+    const newCompany = {
+      id: counter + 1,
+      logo,
+      name,
+      status
+    };
 
-    // Validate input
-    if (!firstName || !lastName || !type || !status) {
+    await companyCollection.insertOne(newCompany);
+    res.status(201).json({
+      data: { company: newCompany },
+      metadata: { message: 'Company created successfully.' }
+    })
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// Edit company
+const editCompany = async (req, res) => {
+  try {
+    const companyCollection = await loadCompanyCollection();
+    const { _id } = req.params;
+    const { logo, name, status } = req.body;
+
+    if (!logo || !name || !status) {
       return res.status(400).json({ message: 'Please enter all fields.' });
     }
 
-    const userExist = await usersCollection.findOne({
-      $or: [{ firstName }, { lastName }],
-    });
-    if (userExist) {
-      return res.status(409).json({ message: 'User details already exist.' });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const counter = await usersCollection.countDocuments();
-    const newUser = {
-      id: counter + 1,
-      firstName,
-      lastName,
-      userName: `${firstName}${lastName}`.toLowerCase(),
-      type,
-      status,
-      password: hashedPassword,
+    const newId = new ObjectId(_id);
+    const company = await companyCollection.findOne({ _id: newId });
+    if (!company) {
+      return res.status(404).json({ message: 'Company not found.' });
     };
 
-    await usersCollection.insertOne(newUser);
-    res.status(201).json({
-      data: { user: { ...newUser } },
-      metadata: { message: 'User created successfully.' },
-    });
+    const updateCompany = {
+      logo,
+      name,
+      status
+    };
+    await companyCollection.updateOne(
+      { _id: newId },
+      { $set: updateCompany }
+    );
+    res.status(200).json({
+      data: { ...updateCompany },
+      metadata: { message: 'Company updated successfully'}
+    })
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }
 };
 
 
-
-module.exports = { createCompany };
+module.exports = { getCompany, createCompany, editCompany };

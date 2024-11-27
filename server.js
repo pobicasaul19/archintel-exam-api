@@ -26,12 +26,20 @@ const login = require('./routes/api/auth/login')
 app.use('/api/auth/login', login)
 
 // Users
-const users = require('./routes/api/users')
-const create = require('./routes/api/users/create')
-const update = require('./routes/api/users/update')
-app.use('/api/users', verifyToken, users)
-app.use('/api/users', verifyToken, create)
-app.use('/api/users', verifyToken, update)
+const getUsers = require('./routes/api/users')
+const createUser = require('./routes/api/users/create')
+const updateUser = require('./routes/api/users/update')
+app.use('/api/users', verifyToken, getUsers)
+app.use('/api/users', verifyToken, createUser)
+app.use('/api/users', verifyToken, updateUser)
+
+// Company
+const getCompanies = require('./routes/api/company')
+const createCompany = require('./routes/api/company/create')
+const updateCompany = require('./routes/api/company/update')
+app.use('/api/companies', verifyToken, getCompanies)
+app.use('/api/companies', verifyToken, createCompany)
+app.use('/api/companies', verifyToken, updateCompany)
 
 const port = process.env.PORT || 5000;
 

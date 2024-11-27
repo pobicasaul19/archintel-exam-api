@@ -84,6 +84,7 @@ const updateUser = async (req, res) => {
     const updatedUser = {
       firstName,
       lastName,
+      userName: `${firstName}${lastName}`.toLowerCase(),
       type,
       status,
     };
