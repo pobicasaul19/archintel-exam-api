@@ -17,6 +17,16 @@ const createCompany = async (req, res) => {
   try {
     const companyCollection = await loadCompanyCollection();
     const { logo, name, status } = req.body;
+
+    if (!logo, !name, !status) {
+      return res.status(400).json({ message: 'Please enter all required fields.' });
+    }
+
+    const companyName = await companyCollection.findOne({ name });
+    if (companyName) {
+      return res.status(409).json({ message: 'Company already exists.' });
+    }
+
     const counter = await companyCollection.countDocuments();
     const newCompany = {
       id: counter + 1,
@@ -63,7 +73,7 @@ const editCompany = async (req, res) => {
     );
     res.status(200).json({
       data: { ...updateCompany },
-      metadata: { message: 'Company updated successfully'}
+      metadata: { message: 'Company updated successfully' }
     })
   } catch (error) {
     res.status(500).json({ message: 'Server error' });

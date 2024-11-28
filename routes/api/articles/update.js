@@ -1,17 +1,23 @@
 const express = require('express');
-const { createArticle } = require('../../../controller/articleController');
+const { editArticle } = require('../../../controller/articleController');
 
 /**
  * @swagger
- * /api/articles/create:
- *   post:
- *     summary: Create article
+ * /api/articles/{_id}:
+ *   put:
+ *     summary: Edit article
  *     tags:
  *       - Articles
  *     parameters:
+ *       - in: path
+ *         name: _id
+ *         description: Article ID
+ *         required: true
+ *         schema:
+ *           type: string
  *       - in: query
  *         name: company
- *         description: Company ID related to the article
+ *         description: Company name related to the article
  *         required: true
  *         schema:
  *           type: string
@@ -29,8 +35,8 @@ const { createArticle } = require('../../../controller/articleController');
  *           type: string
  *       - in: query
  *         name: date
- *         description: Article publication date (defaults to the current date if not provided)
- *         required: false
+ *         description: Article publication date
+ *         required: true
  *         schema:
  *           type: string
  *       - in: query
@@ -40,18 +46,18 @@ const { createArticle } = require('../../../controller/articleController');
  *         schema:
  *           type: string
  *       - in: query
- *         name: image
+ *         name: imageUrl
  *         description: URL of the article image
- *         required: true
+ *         required: false
  *         schema:
  *           type: string
  *     responses:
- *       200:
- *         description: Successfully created
+ *       201:
+ *         description: Successfully updated
  *       400:
  *         description: Bad request
  */
 
 const router = express.Router();
-router.post('/create', createArticle);
+router.put('/:_id', editArticle);
 module.exports = router;

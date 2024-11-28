@@ -41,6 +41,15 @@ app.use('/api/companies', verifyToken, getCompanies)
 app.use('/api/companies', verifyToken, createCompany)
 app.use('/api/companies', verifyToken, updateCompany)
 
+// Article
+const getArticles = require('./routes/api/articles')
+const createArticle = require('./routes/api/articles/create')
+const updateArticle = require('./routes/api/articles/update')
+app.use('/api/articles', verifyToken, getArticles)
+app.use('/api/articles', verifyToken, createArticle)
+app.use('/api/articles', verifyToken, updateArticle)
+
+
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => console.log(`Server running port ${port}`));

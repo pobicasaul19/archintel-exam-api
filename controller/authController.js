@@ -4,6 +4,7 @@ const { loadUserCollection } = require('../config/db');
 
 // Generate access token
 const generateAccessToken = (userId) => {
+  // return jwt.sign({ id: userId }, 'archTestKey', { expiresIn: '30m' });
   return jwt.sign({ id: userId }, 'archTestKey');
 };
 
