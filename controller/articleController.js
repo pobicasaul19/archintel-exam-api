@@ -20,7 +20,7 @@ const createArticle = async (req, res) => {
     const { company, image, title, link, date, content, status, writer, editor } = req.body;
 
     // Validate required fields
-    if (!company || !image || !title || !link || !content) {
+    if (!company && !image && !title && !link && !content) {
       return res.status(400).json({ message: 'All required fields must be provided' });
     }
 
@@ -43,13 +43,11 @@ const createArticle = async (req, res) => {
       return res.status(400).json({ message: 'Image is required (either upload a file or provide a URL)' });
     }
 
-    const formattedDate = date ? moment(date).format('DD/MM/YYYY') : moment().format('DD/MM/YYYY');
-
     // Prepare article data
     const counter = await articleCollection.countDocuments();
     const newArticle = {
       id: counter + 1,
-      company: selectedCompany.name,
+      company: selectedCompany?.name,
       image: imageUrl,
       title,
       link,
