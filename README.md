@@ -10,7 +10,7 @@ npm run build
 npm run start
 ```
 
-## Export the mongdodb collections into json
+## Export the mongodb collections into json
 ```sh
 npm run export
 ```
