@@ -1,7 +1,7 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
+require('dotenv').config();
 const uri = process.env.uri;
 
-// Helper function to get a MongoDB collection dynamically
 const getCollection = async (collectionName) => {
   try {
     const client = await MongoClient.connect(uri, {

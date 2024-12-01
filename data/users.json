@@ -1,0 +1,22 @@
+[
+  {
+    "_id": "6746ec0577dde83f7e6b7b7f",
+    "id": 1,
+    "firstName": "Super",
+    "lastName": "admin",
+    "userName": "superadmin",
+    "type": "editor",
+    "status": "active",
+    "password": "$2a$10$RCvZ5A12PTu00oc7kdzfauB.e2BgD/MfdgVBLlapoGynjt/iVj/0C"
+  },
+  {
+    "_id": "6746ee88c90517d2cff099aa",
+    "id": 2,
+    "firstName": "writer",
+    "lastName": "admin",
+    "userName": "writeradmin",
+    "type": "writer",
+    "status": "inactive",
+    "password": "$2a$10$ASSpQz2eFhIh4yI1Qpwy9evzc956ZkmCprmjvJ0/5fK.i6PkXDkHK"
+  }
+]

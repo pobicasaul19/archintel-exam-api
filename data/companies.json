@@ -1,0 +1,23 @@
+[
+  {
+    "_id": "674735ea3f97c4565f07ee51",
+    "id": 2,
+    "logo": "https://www.logoai.com/uploads/output/2023/08/18/440db4f973c07417c28df062266e86fd.jpg",
+    "name": "Cats&Dogs",
+    "status": "inactive"
+  },
+  {
+    "_id": "67473b406b1e2b5c9e28cd28",
+    "id": 3,
+    "logo": "https://www.logoai.com/uploads/output/2023/06/20/e2dabe437cc7a6defcfab2ad5baffec8.jpg",
+    "name": "EUROPE ENVIRONMENTAL TECHNOLOGY",
+    "status": "active"
+  },
+  {
+    "_id": "67482b0b2d686c39680ea623",
+    "id": 3,
+    "logo": "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/company-logo-design-template-e089327a5c476ce5c70c74f7359c5898_screen.jpg?ts=1672291305",
+    "name": "World Architect Inc.",
+    "status": "active"
+  }
+]

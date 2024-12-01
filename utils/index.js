@@ -17,5 +17,11 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
+const counter = (data, key) => {
+  if (!data || !Array.isArray(data[key])) {
+    return null;
+  }
+  return data[key].sort((a, b) => b.id - a.id)[0];
+}
 
-module.exports = { upload };
+module.exports = {  upload, counter, };

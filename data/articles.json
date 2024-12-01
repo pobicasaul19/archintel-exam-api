@@ -1,0 +1,28 @@
+[
+  {
+    "_id": "674bc885055b6c79d2573fde",
+    "id": 2,
+    "company": "674735ea3f97c4565f07ee51",
+    "image": "https://static01.nytimes.com/newsgraphics/2024-06-04-colummnists-debunked/b587c725-f01a-4e49-b3b8-67e8ca5603fd/_assets/paul.jpg",
+    "title": "The Saying Goes: Dogs Are Man’s Best Friend.",
+    "link": "https://www.nytimes.com/interactive/2024/07/31/opinion/cats-vs-dogs.html",
+    "content": "It’s not easy not being a dog person. Everyone loves a person who loves a dog. Dog people are fun loving and down to earth. Dog lovers are all-American and among animals living in people’s houses, dogs are decidedly the popular favorite; they like to chase things and play catch. A dog, in turn, is man’s best friend.\n\nMost cat people try not to make a show of it. It’s fine to like both animals, but there’s something distinctly suspect about people who outright prefer cats. Cats are considered finicky, standoffish, neurotic; their owners, too. To be catty is to be petty and spiteful. The black cat symbolizes misfortune and death. The very bad date in the story “Cat Person” has, of course, two cats.",
+    "date": "2024-12-01T02:23:01.359Z",
+    "status": "For Edit",
+    "writer": "writer admin",
+    "editor": null
+  },
+  {
+    "_id": "674bcf61ee27b233c74a4985",
+    "id": 6,
+    "company": "67473b406b1e2b5c9e28cd28",
+    "image": "https://www.tandfonline.com/cms/asset/a27fe759-f949-4d4c-b1a1-96c3bdffbc7b/tent20.v045.i26.cover.jpg",
+    "title": "Environmental Technology",
+    "link": "https://www.tandfonline.com/journals/tent20/about-this-journal#aims-and-scope",
+    "content": "Environmental Technology is a leading journal for the rapid publication of science and technology papers on a wide range of topics in applied environmental studies, from environmental engineering to environmental biotechnology, the circular economy, municipal and industrial wastewater management, drinking-water treatment, air- and water-pollution control, solid-waste management, industrial hygiene and associated technologies.\n\nEnvironmental Technology is intended to provide rapid publication of new developments in environmental technology. The journal has an international readership with a broad scientific base. Contributions will be accepted from scientists and engineers in industry, government and universities. Accepted manuscripts are generally published within four months.",
+    "date": "2024-12-01T16:00:00.000Z",
+    "status": "Published",
+    "writer": "Super admin",
+    "editor": "Super admin"
+  }
+]
