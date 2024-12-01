@@ -1,5 +1,16 @@
 # Archintel Exam API
 
-## Run and Build command
+## Build command
+```sh
 npm run build
+```
+
+## Run the server
+```sh
 npm run start
+```
+
+## Export the mongdodb collections into json
+```sh
+npm run export
+```
