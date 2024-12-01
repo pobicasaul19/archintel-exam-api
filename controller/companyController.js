@@ -18,7 +18,7 @@ const createCompany = async (req, res) => {
     const companyCollection = await loadCompanyCollection();
     const { logo, name, status } = req.body;
 
-    if (!logo && !name && !status) {
+    if (!logo || !name || !status) {
       return res.status(400).json({ message: 'Please enter all required fields.' });
     }
 

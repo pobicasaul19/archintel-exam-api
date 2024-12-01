@@ -24,7 +24,7 @@ const createUser = async (req, res) => {
 
     // Validate required fields
     if (!firstName || !lastName || !type || !status) {
-      return res.status(400).json({ message: 'Please enter all required fields.' });
+      return res.status(400).json({ message: 'Please enter all fields.' });
     }
 
     // Check if the user already exists

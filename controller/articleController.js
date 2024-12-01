@@ -1,5 +1,6 @@
-const { loadCompanyCollection, loadArticleCollection, loadUserCollection } = require('../config/db');
+const { loadCompanyCollection, loadArticleCollection } = require('../config/db');
 const { ObjectId } = require('mongodb');
+const validationMessages = require('../models/articleModel');
 
 // Get article lists
 const getArticles = async (req, res) => {
@@ -17,11 +18,13 @@ const getArticles = async (req, res) => {
 const createArticle = async (req, res) => {
   try {
     const articleCollection = await loadArticleCollection();
-    const { company, image, title, link, date, content, status, writer, editor } = req.body;
+    const { company, image, title, link, date, content } = req.body;
 
-    // Validate required fields
-    if (!company && !image && !title && !link && !content) {
-      return res.status(400).json({ message: 'All required fields must be provided' });
+    if (!company || !image || !title || !link || !content) {
+      return res.status(400).json({
+        data: { ...validationMessages },
+        message: 'All required fields must be provided'
+      });
     }
 
     // Validate URL format
@@ -30,32 +33,35 @@ const createArticle = async (req, res) => {
       return res.status(400).json({ message: 'Invalid URL format' });
     }
 
-    // Validate Company
+    // Selected Company
     const companyCollection = await loadCompanyCollection();
-    const selectedCompany = await companyCollection.findOne({ id: company });
+    await companyCollection.findOne({ _id: new ObjectId(company) });
+    // if (!selectedCompany) {
+    //   return res.status(404).json({ message: 'Company not found' });
+    // }
 
     // Check for image file upload
-    const imageUrl = image;
     if (req.file) {
-      imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+      image = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
     }
-    if (!imageUrl) {
+    if (!image) {
       return res.status(400).json({ message: 'Image is required (either upload a file or provide a URL)' });
     }
 
     // Prepare article data
-    const counter = await articleCollection.countDocuments();
+    const latestArticle = await articleCollection.findOne({}, { sort: { id: -1 } });
+    const newId = latestArticle ? latestArticle.id + 1 : 1;
     const newArticle = {
-      id: counter + 1,
-      company: selectedCompany?.name,
-      image: imageUrl,
+      id: newId,
+      company,
+      image,
       title,
       link,
-      date: date ? new Date(date) : new Date(),
       content,
-      status: status || 'For Edit',
-      writer: writer || null,
-      editor: editor || null,
+      date: date ? new Date(date) : new Date(),
+      status: 'For Edit',
+      writer: null,
+      editor: null,
     };
 
     await articleCollection.insertOne(newArticle);
@@ -65,7 +71,6 @@ const createArticle = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
-
 
 // Edit article
 const editArticle = async (req, res) => {
@@ -80,7 +85,7 @@ const editArticle = async (req, res) => {
     }
 
     const companyCollection = await loadCompanyCollection();
-    const selectedCompany = await companyCollection.findOne({ name: company });
+    const selectedCompany = await companyCollection.findOne({ _id: new ObjectId(company) });
     if (!selectedCompany) {
       return res.status(404).json({ message: 'Company not found' });
     }
@@ -118,6 +123,5 @@ const editArticle = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
-
 
 module.exports = { getArticles, createArticle, editArticle }

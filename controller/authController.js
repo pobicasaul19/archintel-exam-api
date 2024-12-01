@@ -15,7 +15,7 @@ const login = async (req, res) => {
     const { userName, password } = req.body;
 
     // Validate input
-    if (!userName && !password) {
+    if (!userName || !password) {
       return res.status(400).json({ message: 'Please enter all fields.' });
     }
     // Find user by userName

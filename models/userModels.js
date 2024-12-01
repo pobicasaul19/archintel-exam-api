@@ -21,9 +21,6 @@ const userSchema = mongoose.Schema(
       required: [true, 'Please specify the status (Active or Inactive)'],
     },
   },
-  {
-    timestamps: true,
-  }
 );
 
 userSchema.statics.validateUser = function (user) {
@@ -39,4 +36,4 @@ userSchema.statics.validateUser = function (user) {
   }
 };
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('user', userSchema);
